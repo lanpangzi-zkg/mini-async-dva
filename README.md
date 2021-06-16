@@ -36,7 +36,7 @@ export default {
         list: [],
     },
     effects: {
-        async fetchList() {
+        async fetchList(payload, updateStore) { // updateStore可用于手动更新该model下的state
             const result = await new Promise((resolve) => {
                 setTimeout(() => {
                     resolve({

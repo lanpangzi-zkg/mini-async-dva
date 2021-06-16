@@ -23,8 +23,22 @@ const store = createStore((state, action) => {
     return state;
 }, {});
 
+function updateStore(namespace) {
+    return function(state) {
+        Promise.resolve().then(() => {
+            store.dispatch({
+                type: '@@redux/update',
+                payload: {
+                    namespace,
+                    updateState: state,
+                }
+            });
+        });
+    }
+}
+
 async function executeAsyncTask(state, namespace, fn, payload) {
-    const response = await fn.call(state[namespace], payload);
+    const response = await fn.call(state[namespace], payload, updateStore(namespace));
     store.dispatch({
         type: '@@redux/update',
         payload: {
