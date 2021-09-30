@@ -8,6 +8,8 @@ function Home({ dispatch, home: { count } }) {
             payload: {
                 id: '1'
             },
+        }).then((result) => {
+            console.log(result);
         });
     }, []);
     return (

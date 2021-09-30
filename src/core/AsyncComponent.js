@@ -31,9 +31,9 @@ function AsyncComponent({ deps, children, ...rest }) {
     }
     if (modelLoaded) {
         return (
-            <>
+            <React.Fragment>
                 {React.createElement(children, rest)}
-            </>
+            </React.Fragment>
         );
     }
     return null;

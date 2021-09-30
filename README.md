@@ -42,6 +42,9 @@ export default {
                     resolve({
                         list: [{ name: 'b' }],
                     });
+                    updateStore({
+                        list: [{ name: 'b' }],
+                    });
                 }, 2000);
             });
             return result;
@@ -69,7 +72,7 @@ class Bar extends React.Component {
             payload: {
                 id: '123',
             }
-        });
+        }).then((result) => {......});
     }
     render() {
         const { bar: { list } } = this.props;

@@ -4,10 +4,13 @@ export default {
         list: [],
     },
     effects: {
-        async fetchList() {
+        async fetchList(_, updateStore) {
             const result = await new Promise((resolve) => {
                 setTimeout(() => {
                     resolve({
+                        list: [{ name: 'b' }],
+                    });
+                    updateStore({
                         list: [{ name: 'b' }],
                     });
                 }, 2000);

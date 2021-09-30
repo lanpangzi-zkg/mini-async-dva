@@ -1,6 +1,6 @@
 {
   "name": "mini-async-dva",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "mini-async-dva",
   "main": "index.js",
   "scripts": {

@@ -5,17 +5,19 @@ export default {
         count: 0,
     },
     effects: {
-        addCount(payload) {
-            return {
+        addCount(payload, updateStore) {
+            updateStore({
                 count: this.count + payload
-            };
+            });
         },
-        async fetchList() {
+        async fetchList(_, updateStore) {
             const result = await new Promise((resolve) => {
                 setTimeout(() => {
-                    resolve({
-                        list: [{ name: 'a' }],
-                    });
+                    const data = {
+                        list: [{ name: 'home' }],
+                    };
+                    resolve(data);
+                    updateStore(data);
                 }, 2000);
             });
             return result;

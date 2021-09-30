@@ -4,8 +4,8 @@ import { createStore } from 'redux';
 
 const effectsMap = {};
 
-const store = createStore((state, action) => {
-    const { type, payload = {} } = action;
+const store = createStore((state = { publicLayout: FLayoutModel.state }, action) => {
+    const { type, payload = {}, promiseHook } = action;
     const { namespace, effects, initalState, updateState } = payload;
     if (type === '@@redux/register') {
         effectsMap[namespace] = effects;
@@ -17,7 +17,7 @@ const store = createStore((state, action) => {
     if (type.includes('/') && !type.includes('@@redux/INIT')) {
         const [ sliceNameSpace, effect ] = type.split('/');
         if (effectsMap[sliceNameSpace] && effectsMap[sliceNameSpace][effect]) {
-            executeAsyncTask(state, sliceNameSpace, effectsMap[sliceNameSpace][effect], payload);
+            executeAsyncTask(state, sliceNameSpace, effectsMap[sliceNameSpace][effect], payload, promiseHook);
         }
     }
     return state;
@@ -37,15 +37,15 @@ function updateStore(namespace) {
     }
 }
 
-async function executeAsyncTask(state, namespace, fn, payload) {
-    const response = await fn.call(state[namespace], payload, updateStore(namespace));
-    store.dispatch({
-        type: '@@redux/update',
-        payload: {
-            namespace,
-            updateState: response,
-        }
-    });
+async function executeAsyncTask(state, namespace, fn, payload, promiseHook) {
+    try {
+        const response = await fn.call(state[namespace], payload, updateStore(namespace));
+        promiseHook && promiseHook.resolve(response);
+        return response;
+    } catch (error) {
+        promiseHook && promiseHook.reject(error);
+    }
+
 }
 
 function AppLauncher({ children }) {
